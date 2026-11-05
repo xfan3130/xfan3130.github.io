@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Total Recall Psychology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+:root{--ink:#1b2142;--muted:#5b628c;--paper:#fbf6e9;--accent:#c98a12;--line:#d9d2bd;--red:#e5484d}
+*{box-sizing:border-box}
+body{margin:0;background:#ece6d6;color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;font-size:14px;line-height:1.4}
+.page{max-width:900px;margin:24px auto;background:var(--paper);padding:40px 48px;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+@media(max-width:640px){.page{padding:24px 14px;margin:0;border-radius:0} table{font-size:13px}}
+h1{font-family:Fraunces,Georgia,serif;font-size:30px;margin:0;line-height:1.1}
+h1 b{color:var(--accent)}
+.sub{color:var(--muted);margin:4px 0 10px;font-size:14px}
+p{margin:6px 0}
+.intro{border-left:4px solid var(--red);padding:4px 0 4px 12px;margin:10px 0 12px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f2ecdc;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+td:first-child{font-weight:700;white-space:nowrap}
+tr.sec td{background:#1b2142;color:#fff;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;white-space:normal}
+.closing{margin-top:10px}
+.toolbar{max-width:900px;margin:16px auto 0;display:flex;gap:10px;justify-content:flex-end;padding:0 8px}
+.toolbar a,.toolbar button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 16px;background:#1b2142;color:#fff;cursor:pointer;text-decoration:none}
+@media print{
+  @page{size:letter;margin:0.4in}
+  body{background:#fff;font-size:10.2px;line-height:1.3}
+  .page{box-shadow:none;margin:0;max-width:none;padding:0;border-radius:0}
+  .toolbar{display:none}
+  h1{font-size:20px} .sub{font-size:10.5px;margin:2px 0 6px}
+  th,td{padding:2.5px 5px} th{font-size:9px} tr.sec td{font-size:9px;padding:2px 5px}
+  .intro{margin:5px 0 7px} p{margin:3px 0}
+}
+</style>
+</head>
+<body>
+<div class="toolbar"><a href="index.html">← Play the game</a><a href="rules.html">Rules</a><button onclick="print()">Print / Save as PDF</button></div>
+<div class="page">
+  <h1>TOTAL <b>RECALL</b>: How the Psychology Works</h1>
+  <p class="sub">AP Psychology · Unit 2: Cognition (Memory, Encoding, Storage, Retrieval, and Forgetting) · <b>Spoiler warning: players should read this after playing.</b></p>
+  <p class="intro">In <i>Total Recall</i>, players don't just read about memory concepts. They <b>experience</b> each one. Every round is a small version of a real memory experiment. Because players aren't told ahead of time what the round is testing, their memories behave naturally. A "GOTCHA!" screen then charts the group's own results and explains the concept. The whole game follows the <b>Atkinson–Shiffrin multi-store model</b>: information moves from <b>sensory memory</b> (the flashed card) into <b>short-term/working memory</b> and, with enough processing, into <b>long-term memory</b>.</p>
+  <table>
+    <tr><th>Term</th><th>Definition</th><th>How it shows up in the game</th></tr>
+    <tr class="sec"><td colspan="3">Round 1: The List</td></tr>
+    <tr><td>Serial position effect</td><td>Tendency to recall the first and last items in a list best.</td><td>The group's recall chart for the 15 words forms a "U" shape.</td></tr>
+    <tr><td>Primacy effect</td><td>Better recall of early items because they were rehearsed into long-term memory.</td><td>Words #1–3 get the most hands; they were repeated while the list was short.</td></tr>
+    <tr><td>Recency effect</td><td>Better recall of the latest items, which are still in short-term memory.</td><td>Recall starts right after the last word, so words #13–15 are still "fresh."</td></tr>
+    <tr><td>Maintenance rehearsal</td><td>Repeating information to keep it in memory.</td><td>Players silently repeat early words, which is the cause of the primacy effect.</td></tr>
+    <tr class="sec"><td colspan="3">Round 2: Strings</td></tr>
+    <tr><td>Working memory / memory span</td><td>Active, limited-capacity store; holds about 7 ± 2 items (George Miller).</td><td>Accuracy is high for 4–6 digits and collapses around 8–10 digits.</td></tr>
+    <tr><td>Chunking</td><td>Grouping items into meaningful units so more fit in short-term memory.</td><td>The second 12-letter string hides FBI·CIA·USA·NBA, so 12 letters become 4 chunks, and scores jump compared with the random 12-letter string.</td></tr>
+    <tr><td>Effortful processing / decay</td><td>Encoding that takes attention; unrehearsed short-term memories fade within ~20 seconds.</td><td>Players must hold each string with effort until they can write it down.</td></tr>
+    <tr class="sec"><td colspan="3">Round 3: Snap Judgments</td></tr>
+    <tr><td>Levels of processing</td><td>Craik &amp; Lockhart: how deeply information is processed determines how well it is remembered.</td><td>Half the questions are about letters, half about meaning; the surprise recall test compares them.</td></tr>
+    <tr><td>Shallow vs. deep processing</td><td>Shallow = surface features (structural); deep = meaning (semantic).</td><td>"Is it in CAPITALS?" words are recalled far less than "Could you eat this?" words (chart shows the gap).</td></tr>
+    <tr><td>Self-reference effect</td><td>Information related to ourselves is remembered especially well.</td><td>"Have YOU ever visited a dentist?" is usually one of the best-remembered words.</td></tr>
+    <tr><td>Automatic processing</td><td>Unconscious encoding that happens without effort (incidental learning).</td><td>Players never try to memorize, but still remember words when surprised by the test.</td></tr>
+    <tr class="sec"><td colspan="3">Round 4: Memory Check</td></tr>
+    <tr><td>False memory / DRM paradigm</td><td>Remembering something that never happened (Roediger &amp; McDermott).</td><td>Every word relates to "sleep," but "sleep" is never shown; many players say YES to it.</td></tr>
+    <tr><td>Reconstructive memory</td><td>Memories are rebuilt at retrieval and can be distorted.</td><td>Players fill in the "obvious" missing word and feel confident about it.</td></tr>
+    <tr><td>Semantic network / spreading activation</td><td>Concepts are linked; activating one activates related ones.</td><td>Bed, dream, yawn and the others each activate "sleep," priming it 15 times.</td></tr>
+    <tr><td>Source amnesia</td><td>Forgetting where a memory came from.</td><td>Players confuse what they <i>saw</i> with what they <i>thought of</i>.</td></tr>
+    <tr class="sec"><td colspan="3">Round 5: Recall Bowl</td></tr>
+    <tr><td>Recall vs. recognition</td><td>Recall = generate information with no options; recognition = identify it from options.</td><td>Free recall is worth 3 pts, recognition only 1 pt; the chart shows recognition has the highest success rate.</td></tr>
+    <tr><td>Retrieval cues / tip-of-the-tongue</td><td>Hints that help access stored memories; the feeling of almost retrieving a word.</td><td>Cued questions ("L _ _ _ _ _") give a first letter and length, so they sit between recall and recognition (2 pts).</td></tr>
+    <tr><td>Proactive &amp; retroactive interference</td><td>Old learning blocks new (proactive); new learning blocks old (retroactive).</td><td>Wrong buzzes are often real words from the <i>wrong round</i>; recognition distractors are taken from other rounds on purpose.</td></tr>
+    <tr><td>Testing effect</td><td>Retrieval practice strengthens memory more than re-studying.</td><td>Quizzing players on old lists makes those memories stronger, so players leave remembering the concepts.</td></tr>
+  </table>
+  <p class="closing"><b>Why this design works:</b> the rules themselves create the psychology. Flash timing and immediate recall produce serial position effects; string length tests memory span; the question type controls processing depth; the word list creates false memories; and point values reward the hardest kind of retrieval. Players learn the concepts by noticing their own memory doing them.</p>
+</div>
+</body>
+</html>
