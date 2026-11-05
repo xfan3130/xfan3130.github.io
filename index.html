@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Total Recall</title>
+<meta name="description" content="Total Recall — a free-for-all memory showdown that makes players experience AP Psychology Unit 2 (Cognition) firsthand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#0c1330; --panel:#18224b; --panel2:#1f2b5c; --line:#2d3b78;
+  --ink:#eef1ff; --muted:#a3add9; --card:#fbf6e9; --cardInk:#1b2142;
+  --accent:#FFB547; --good:#3DDC97; --bad:#FF6B6B; --sky:#4CC9F0; --violet:#A78BFA;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:radial-gradient(1200px 700px at 50% -10%,#22306b 0%,var(--bg) 62%) fixed,var(--bg);
+  color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;font-size:18px;line-height:1.45;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;line-height:1.1}
+a{color:var(--sky)}
+#top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);background:rgba(8,12,34,.65);backdrop-filter:blur(6px);flex-wrap:wrap;min-height:58px}
+.logo{font-family:Fraunces,serif;font-weight:800;font-size:22px;letter-spacing:.05em;white-space:nowrap}
+.logo b{color:var(--accent)}
+.roundtag{color:var(--muted);font-weight:500;font-size:15px;white-space:nowrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.chip{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:999px;background:var(--panel);border:2px solid transparent;font-weight:700;font-size:16px;cursor:default;transition:transform .15s,box-shadow .15s,opacity .2s}
+.chip .dot{width:12px;height:12px;border-radius:50%}
+.chip .key{font-size:12px;padding:1px 6px;border-radius:5px;background:rgba(255,255,255,.1);color:var(--muted)}
+.chip .pts{font-variant-numeric:tabular-nums;min-width:2ch;text-align:right}
+.chip.buzz{transform:scale(1.12);box-shadow:0 0 0 4px var(--c),0 0 30px var(--c)}
+.chip.locked{opacity:.3}
+.chip.clickable{cursor:pointer}
+.menubtn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+#stage{flex:1;display:flex;align-items:center;justify-content:center;padding:28px 16px 40px}
+.wrap{width:min(1100px,100%)}
+.center{text-align:center}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:14px;font-weight:700;color:var(--accent)}
+.lead{font-size:21px;color:var(--muted);max-width:760px;margin:12px auto 0}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 24px;background:var(--accent);color:#2a1d00;cursor:pointer;font-size:18px;transition:transform .1s,filter .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn.good{background:var(--good);color:#032517}
+.btn.bad{background:var(--bad);color:#2b0505}
+.btn.small{padding:8px 14px;font-size:15px;border-radius:9px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Index card */
+.card{background:var(--card);color:var(--cardInk);border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.5);position:relative;overflow:hidden;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 46px,rgba(110,150,225,.28) 46px 48px);background-position:0 70px}
+.card::before{content:'';position:absolute;left:0;right:0;top:66px;height:3px;background:rgba(229,72,77,.55)}
+.flash{min-height:min(56vh,460px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:90px 30px 50px}
+.cardmeta{position:absolute;top:18px;left:0;right:0;text-align:center;font-weight:700;font-size:clamp(18px,2.6vw,30px);color:#3a4170}
+.flashword{font-family:Fraunces,serif;font-weight:800;font-size:clamp(56px,11vw,150px);letter-spacing:.01em;line-height:1;word-break:break-word}
+.flashword.seq{font-family:'Space Grotesk',monospace;font-weight:700;font-size:clamp(34px,6.4vw,92px);letter-spacing:.06em;white-space:nowrap}
+.flashword.small{font-size:clamp(40px,7vw,96px)}
+.progress{display:flex;gap:6px;justify-content:center;margin-top:18px}
+.progress i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.progress i.on{background:var(--accent)}
+
+/* Panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+.steps{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px;text-align:left}
+.steps li{display:flex;gap:14px;align-items:flex-start;background:var(--panel2);border-radius:14px;padding:14px 16px}
+.steps .n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#2a1d00;font-weight:800;display:grid;place-items:center}
+
+/* Title */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.hero h1{font-size:clamp(60px,11vw,140px);font-weight:800;letter-spacing:.02em}
+.hero h1 b{color:var(--accent)}
+.stack{position:relative;width:min(300px,70vw);height:150px;margin:6px 0 34px}
+.stack .mini{position:absolute;inset:0;background:var(--card);border-radius:12px;box-shadow:0 14px 30px rgba(0,0,0,.4);color:var(--cardInk);font-family:Fraunces,serif;font-weight:800;font-size:40px;display:grid;place-items:center;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 22px,rgba(110,150,225,.3) 22px 23px);background-position:0 34px}
+.stack .mini::before{content:'';position:absolute;top:30px;left:0;right:0;height:2px;background:rgba(229,72,77,.55)}
+.stack .mini:nth-child(1){transform:rotate(-9deg) translate(-30px,6px);opacity:.75}
+.stack .mini:nth-child(2){transform:rotate(6deg) translate(28px,2px);opacity:.88}
+.stack .mini:nth-child(3){animation:bob 4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.facts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.facts span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--muted);font-size:15px}
+
+/* Setup */
+.seg{display:inline-flex;background:var(--panel2);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{font:inherit;font-weight:700;border:0;background:none;color:var(--muted);padding:8px 14px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--accent);color:#2a1d00}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.field label{font-weight:700;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.prow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.prow .dot{width:16px;height:16px;border-radius:50%;flex:none}
+.prow input{flex:1;min-width:0;font:inherit;background:var(--bg);border:2px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px}
+.prow input:focus{outline:none;border-color:var(--accent)}
+.kbd{display:inline-block;min-width:34px;text-align:center;padding:4px 8px;border-radius:8px;background:var(--bg);border:1px solid var(--line);border-bottom-width:3px;font-weight:700}
+
+/* Timer */
+.timer{position:relative;width:min(300px,64vw);aspect-ratio:1;margin:26px auto 0}
+.timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:10}
+.timer .trk{stroke:var(--panel2)}
+.timer .prog{stroke:var(--accent);stroke-linecap:round;transition:stroke .3s}
+.timer .tnum{position:absolute;inset:0;display:grid;place-items:center;font-family:Fraunces,serif;font-weight:800;font-size:clamp(64px,12vw,110px);font-variant-numeric:tabular-nums}
+.timer.low .prog{stroke:var(--bad)}
+
+/* Tally */
+.tally{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:22px}
+.tchip{position:relative;background:var(--card);color:var(--cardInk);border-radius:12px;padding:12px 12px 10px;text-align:left;cursor:pointer;user-select:none;border:3px solid transparent;transition:transform .08s}
+.tchip:active{transform:scale(.97)}
+.tchip .w{font-family:Fraunces,serif;font-weight:800;font-size:24px;line-height:1.1;word-break:break-word}
+.tchip .s{font-size:13px;color:#5b628c;font-weight:700;margin-top:2px}
+.tchip .cnt{position:absolute;top:8px;right:8px;min-width:30px;height:30px;padding:0 6px;border-radius:15px;background:#1b2142;color:#fff;font-weight:800;display:grid;place-items:center;font-size:16px}
+.tchip .minus{position:absolute;bottom:6px;right:8px;width:26px;height:26px;border-radius:50%;border:0;background:#e6e0cf;color:#1b2142;font-weight:800;cursor:pointer;font-size:16px;line-height:1}
+.tchip.deep{border-color:var(--violet)} .tchip.shallow{border-color:#c9c1a8}
+.tchip.old{border-color:var(--good)} .tchip.new{border-color:#c9c1a8} .tchip.lure{border-color:var(--bad)}
+.legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:15px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+.hint{color:var(--muted);font-size:15px;margin-top:10px}
+
+/* Gotcha */
+.gotcha{display:grid;grid-template-columns:1.1fr 1fr;gap:22px;text-align:left;margin-top:20px}
+@media(max-width:900px){.gotcha{grid-template-columns:1fr}}
+.gotcha h3{font-size:20px;margin-bottom:6px;color:var(--accent);font-family:'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:.1em}
+.gotcha p{margin:0 0 14px}
+.terms{display:grid;gap:8px}
+.term{background:var(--panel2);border-radius:12px;padding:10px 14px;font-size:16px}
+.term b{color:var(--ink)} .term span{color:var(--muted)}
+.chart{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px}
+.chart svg{width:100%;height:auto;display:block}
+.stamp.long{font-size:clamp(28px,4.6vw,50px)}
+.stamp{display:inline-block;font-family:Fraunces,serif;font-weight:800;font-size:clamp(40px,7vw,76px);color:var(--bad);border:6px solid var(--bad);border-radius:14px;padding:2px 22px;transform:rotate(-4deg);letter-spacing:.06em;margin-bottom:12px}
+
+/* Scores */
+.srow{display:grid;grid-template-columns:20px 1fr auto auto;gap:14px;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:14px;margin-bottom:10px;text-align:left}
+.srow .dot{width:16px;height:16px;border-radius:50%}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:42px;height:42px;border-radius:10px;border:0;background:var(--line);color:var(--ink);font-size:22px;font-weight:800;cursor:pointer}
+.step input{width:64px;text-align:center;font:inherit;font-weight:800;font-size:22px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:6px}
+.tot{color:var(--muted);font-variant-numeric:tabular-nums;min-width:90px;text-align:right}
+.bar{height:34px;border-radius:9px;display:flex;align-items:center;padding:0 12px;font-weight:800;color:#0c1330;min-width:44px;transition:width .6s}
+
+/* Bowl */
+.qcard{padding:84px 34px 40px;min-height:340px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.qtext{font-family:Fraunces,serif;font-weight:800;font-size:clamp(30px,4.6vw,56px);line-height:1.15;max-width:900px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;width:min(760px,100%)}
+.opts div{background:#fff;border:2px solid #d9d2bd;border-radius:12px;padding:12px 16px;font-weight:700;font-size:clamp(20px,2.6vw,30px);text-align:left}
+.opts div b{color:#b6882b;margin-right:10px}
+.cue{font-family:'Space Grotesk',monospace;font-weight:700;font-size:clamp(34px,5.5vw,70px);letter-spacing:.2em;margin-top:18px}
+.ptsbadge{position:absolute;top:16px;right:18px;background:#1b2142;color:#fff;font-weight:800;border-radius:999px;padding:6px 14px;font-size:16px;z-index:1}
+.typebadge{position:absolute;top:16px;left:18px;background:#e9e2cc;color:#1b2142;font-weight:800;border-radius:999px;padding:6px 14px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;z-index:1}
+.answer{margin-top:22px;font-size:clamp(22px,3vw,34px);font-weight:800;color:#1f8a5a}
+.buzzline{min-height:64px;margin-top:20px;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.buzzline .who{padding:8px 18px;border-radius:999px;color:#0c1330;font-size:26px;animation:pop .25s}
+@keyframes pop{from{transform:scale(.6)}to{transform:scale(1)}}
+.keys{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.keys div{display:flex;align-items:center;gap:10px;background:var(--panel2);padding:10px 16px;border-radius:14px;font-weight:700}
+
+/* Final */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-top:30px}
+.podcol{display:flex;flex-direction:column;align-items:center;gap:4px;width:min(190px,28vw)}
+.pod{width:100%;border-radius:14px 14px 0 0;display:flex;justify-content:center;padding-top:10px;color:#0c1330;font-weight:800}
+.podcol .pn{font-size:clamp(16px,2.2vw,24px);font-weight:700;text-align:center;word-break:break-word}
+.podcol .ps{font-family:Fraunces,serif;font-weight:800;font-size:clamp(28px,4vw,44px);line-height:1}
+.pod .place{font-size:clamp(34px,5vw,60px);font-family:Fraunces,serif}
+table.break{width:100%;border-collapse:collapse;margin-top:16px;font-size:16px}
+table.break th,table.break td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center}
+table.break th{color:var(--muted);font-weight:700}
+table.break td:first-child,table.break th:first-child{text-align:left}
+.recap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px;text-align:left}
+.recap div{background:var(--panel2);border-radius:12px;padding:12px 14px;font-size:15px}
+.recap b{display:block;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+
+.modal{position:fixed;inset:0;background:rgba(5,8,25,.75);display:grid;place-items:center;z-index:20;padding:16px}
+.modal .panel{max-width:440px;text-align:center}
+</style>
+</head>
+<body>
+<header id="top"></header>
+<main id="stage"></main>
+
+<script>
+/* ============================================================
+   TOTAL RECALL — free-for-all memory showdown (AP Psych Unit 2)
+   ============================================================ */
+const COLORS=['#FF6B6B','#FFB547','#3DDC97','#4CC9F0','#A78BFA','#F472B6'];
+const KEYS=['Q','Z','T','B','P','M'];
+const SPEED=Number(new URLSearchParams(location.search).get('speed'))||1; // test hook
+
+/* ---------- DECKS (two decks so the game can be replayed) ---------- */
+const DECKS={
+ A:{
+  r1:['candle','river','jacket','pencil','tiger','window','garden','rocket','button','mirror','castle','ladder','pepper','wallet','anchor'],
+  r2:[
+    {show:'4 9 1 7',kind:'4 digits',ms:4000},
+    {show:'6 2 8 5 3 1',kind:'6 digits',ms:5000},
+    {show:'7 3 9 1 4 8 2 6',kind:'8 digits',ms:6000},
+    {show:'5 8 2 9 6 1 7 3 4 0',kind:'10 digits',ms:7000},
+    {show:'Q K Z R W M T X P L V N',kind:'12 letters',ms:6000},
+    {show:'F B I C I A U S A N B A',kind:'12 letters',ms:6000,chunks:'FBI · CIA · USA · NBA'}
+  ],
+  r3:[
+    ['HAMMER','Is this word in CAPITAL letters?','s'],
+    ['parrot','Is this a living thing?','d'],
+    ['trumpet','Does this word contain the letter E?','s'],
+    ['banana','Could you eat this?','d'],
+    ['spoon','Does this word have more than 5 letters?','s'],
+    ['violin','Could this make music?','d'],
+    ['CACTUS','Is this word in CAPITAL letters?','s'],
+    ['glacier','Is this colder than a refrigerator?','d'],
+    ['helmet','Does this word contain the letter O?','s'],
+    ['dentist','Have YOU ever visited one?','d'],
+    ['bucket','Does this word end in the letter T?','s'],
+    ['volcano','Would this be dangerous to stand on?','d']
+  ],
+  r4:{lure:'sleep',
+    list:['bed','rest','awake','tired','dream','wake','snooze','blanket','doze','slumber','snore','nap','peace','yawn','drowsy'],
+    test:[['dream','old'],['car','new'],['snore','old'],['butter','new'],['sleep','lure'],['rest','old'],['turtle','new'],['yawn','old']]},
+  bowl:[
+    {type:'recall',q:'What was the FIRST word on the Round 1 list?',a:'candle'},
+    {type:'recog',q:'Which of these was on the Round 1 list?',opts:['parrot','mirror','blanket','kettle'],a:'mirror'},
+    {type:'cued',q:'A word from Round 3:',cue:'V _ _ _ _ _ _',a:'volcano'},
+    {type:'recall',q:'What was the LAST word on the Round 1 list?',a:'anchor'},
+    {type:'recall',q:'Recite the 6-digit number from Round 2.',a:'6 2 8 5 3 1'},
+    {type:'recog',q:'True or false: the word SLEEP was shown in Round 4.',opts:['True','False'],a:'False — it was never shown!'},
+    {type:'cued',q:'A word from Round 1:',cue:'L _ _ _ _ _',a:'ladder'},
+    {type:'recall',q:'Name a word from Round 3 that was shown in CAPITAL letters.',a:'HAMMER or CACTUS'},
+    {type:'recog',q:'Which of these was on the Round 3 list?',opts:['pepper','snooze','banana','lemon'],a:'banana'},
+    {type:'recall',q:'Name any word from the MIDDLE of the Round 1 list (words 6–10).',a:'window, garden, rocket, button, mirror'},
+    {type:'cued',q:'A word from Round 4:',cue:'S _ _ _ _ _ _',a:'slumber'},
+    {type:'recall',q:'What four "chunks" were hidden in the second letter string in Round 2?',a:'FBI · CIA · USA · NBA'}
+  ]
+ },
+ B:{
+  r1:['rabbit','carpet','lemon','compass','dragon','basket','mountain','teacup','puzzle','saddle','statue','pirate','tunnel','feather','biscuit'],
+  r2:[
+    {show:'8 3 6 2',kind:'4 digits',ms:4000},
+    {show:'1 7 4 9 5 2',kind:'6 digits',ms:5000},
+    {show:'3 9 6 2 8 4 1 7',kind:'8 digits',ms:6000},
+    {show:'2 6 0 4 9 1 5 8 3 7',kind:'10 digits',ms:7000},
+    {show:'X D T Q M R B W Z K H N',kind:'12 letters',ms:6000},
+    {show:'A T M S O S D I Y U F O',kind:'12 letters',ms:6000,chunks:'ATM · SOS · DIY · UFO'}
+  ],
+  r3:[
+    ['LADDER','Is this word in CAPITAL letters?','s'],
+    ['zebra','Is this a living thing?','d'],
+    ['pocket','Does this word contain the letter K?','s'],
+    ['muffin','Could you eat this?','d'],
+    ['broom','Does this word have more than 5 letters?','s'],
+    ['guitar','Could this make music?','d'],
+    ['MARBLE','Is this word in CAPITAL letters?','s'],
+    ['iceberg','Is this colder than a refrigerator?','d'],
+    ['candle','Does this word contain the letter O?','s'],
+    ['doctor','Have YOU ever visited one?','d'],
+    ['goblet','Does this word end in the letter T?','s'],
+    ['tornado','Would this be dangerous to stand in?','d']
+  ],
+  r4:{lure:'sweet',
+    list:['sour','candy','sugar','bitter','good','taste','tooth','nice','honey','soda','chocolate','heart','cake','tart','pie'],
+    test:[['candy','old'],['jacket','new'],['honey','old'],['garden','new'],['sweet','lure'],['sour','old'],['pebble','new'],['cake','old']]},
+  bowl:[
+    {type:'recall',q:'What was the FIRST word on the Round 1 list?',a:'rabbit'},
+    {type:'recog',q:'Which of these was on the Round 1 list?',opts:['zebra','compass','honey','walnut'],a:'compass'},
+    {type:'cued',q:'A word from Round 3:',cue:'T _ _ _ _ _ _',a:'tornado'},
+    {type:'recall',q:'What was the LAST word on the Round 1 list?',a:'biscuit'},
+    {type:'recall',q:'Recite the 6-digit number from Round 2.',a:'1 7 4 9 5 2'},
+    {type:'recog',q:'True or false: the word SWEET was shown in Round 4.',opts:['True','False'],a:'False — it was never shown!'},
+    {type:'cued',q:'A word from Round 1:',cue:'F _ _ _ _ _ _',a:'feather'},
+    {type:'recall',q:'Name a word from Round 3 that was shown in CAPITAL letters.',a:'LADDER or MARBLE'},
+    {type:'recog',q:'Which of these was on the Round 3 list?',opts:['lemon','candy','muffin','pickle'],a:'muffin'},
+    {type:'recall',q:'Name any word from the MIDDLE of the Round 1 list (words 6–10).',a:'basket, mountain, teacup, puzzle, saddle'},
+    {type:'cued',q:'A word from Round 4:',cue:'C _ _ _ _ _ _ _ _',a:'chocolate'},
+    {type:'recall',q:'What four "chunks" were hidden in the second letter string in Round 2?',a:'ATM · SOS · DIY · UFO'}
+  ]
+ }
+};
+const BOWL_PTS={recall:3,cued:2,recog:1};
+const BOWL_LABEL={recall:'Free recall',cued:'Cued recall',recog:'Recognition'};
+
+const ROUNDS=[
+ {title:'The List',max:15,steps:[
+   '15 words will flash on the card, one at a time.',
+   'Just watch — <b>no writing yet</b>.',
+   'When the timer starts, write as many words as you can in the Round 1 box, in any order.',
+   'Scoring: <b>1 point</b> per correct word.']},
+ {title:'Strings',max:6,steps:[
+   'You will see 6 strings of numbers or letters, one at a time.',
+   'After each one disappears, write it on the next line of the Round 2 box — <b>exact order</b>.',
+   'You get a few seconds to write before the next string.',
+   'Scoring: <b>1 point</b> per string that is perfectly correct.']},
+ {title:'Snap Judgments',max:12,steps:[
+   'Each card shows a word with a YES/NO question about it.',
+   'Shout <b>YES</b> or <b>NO</b> (or thumbs up/down) as fast as you can.',
+   'Pencils down — <b>no writing</b> during this round.',
+   'Scoring will be explained at the end of the round.']},
+ {title:'Memory Check',max:8,steps:[
+   '15 words will flash on the card. Watch carefully.',
+   'Then comes a memory test: 8 words, one at a time.',
+   'For each, write <b>Y</b> (it was on the list) or <b>N</b> (it wasn\'t) on lines 1–8 of the Round 4 box.',
+   'Scoring: <b>1 point</b> per correct Y/N.']},
+ {title:'Recall Bowl',max:null,steps:[
+   'Buzzer toss-ups about <b>every earlier round</b>. Free-for-all: anyone can buzz at any time.',
+   'Buzz with your key (or tap your name). The first buzzer answers out loud within 5 seconds.',
+   'Points: <b>Free recall 3</b> · <b>Cued recall 2</b> · <b>Recognition 1</b>.',
+   'Wrong answer: <b>−1</b> and you are locked out of that question.']}
+];
+
+/* ---------- STATE ---------- */
+const S={deck:'A',n:4,names:['','','','','',''],players:[],round:0,tally:{},settings:{flash:2000,recall:60},mode:'menu'};
+const stage=document.getElementById('stage'), topEl=document.getElementById('top');
+const D=()=>DECKS[S.deck];
+let gen=0; const CANCEL=Symbol('cancel');
+function cancel(){gen++}
+function wait(ms){const g=gen;return new Promise((res,rej)=>setTimeout(()=>g===gen?res():rej(CANCEL),ms*SPEED))}
+async function flow(fn){cancel();try{await fn()}catch(e){if(e!==CANCEL)console.error(e)}}
+function waitClick(id){const g=gen;return new Promise((res,rej)=>{const el=document.getElementById(id);el.onclick=()=>g===gen?res():rej(CANCEL)})}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const total=p=>p.rounds.reduce((a,b)=>a+b,0);
+
+/* ---------- SOUND ---------- */
+let actx;
+function beep(f=660,d=.12,type='sine',vol=.15){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;g.gain.value=vol;o.connect(g);g.connect(actx.destination);const t=actx.currentTime;g.gain.exponentialRampToValueAtTime(.0001,t+d);o.start(t);o.stop(t+d)}catch(e){}}
+
+/* ---------- HEADER ---------- */
+function renderTop(){
+  const inGame=S.players.length&&S.mode!=='menu'&&S.mode!=='setup';
+  const label=inGame&&S.mode!=='final'?`Round ${S.round+1} of 5 · ${ROUNDS[S.round].title}`:'';
+  topEl.innerHTML=`<div class="logo">TOTAL <b>RECALL</b></div>${label?`<div class="roundtag">${label}</div>`:''}
+  ${inGame?`<div class="chips">${S.players.map((p,i)=>`<div class="chip ${S.mode==='bowl'?'clickable':''} ${B.buzzer===i&&S.mode==='bowl'?'buzz':''} ${S.mode==='bowl'&&B.locked.has(i)?'locked':''}" data-i="${i}" style="--c:${p.color}">
+     <span class="dot" style="background:${p.color}"></span>${esc(p.name)}<span class="pts">${total(p)}</span><span class="key">${p.key}</span></div>`).join('')}</div>
+   <button class="menubtn" id="quit">Menu</button>`:''}`;
+  const q=document.getElementById('quit'); if(q) q.onclick=confirmQuit;
+  topEl.querySelectorAll('.chip.clickable').forEach(c=>c.onclick=()=>buzz(+c.dataset.i));
+}
+function confirmQuit(){
+  const m=document.createElement('div');m.className='modal';
+  m.innerHTML=`<div class="panel"><h2>Quit this game?</h2><p class="hint">Scores will be lost.</p><div class="row"><button class="btn ghost" id="mno">Keep playing</button><button class="btn bad" id="myes">Quit</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#mno').onclick=()=>m.remove();
+  m.querySelector('#myes').onclick=()=>{m.remove();titleScreen()};
+}
+
+/* ---------- TITLE ---------- */
+function titleScreen(){
+  cancel();S.mode='menu';renderTop();
+  stage.innerHTML=`<div class="wrap hero">
+    <div class="stack"><div class="mini">lantern</div><div class="mini">5 0 2</div><div class="mini">recall?</div></div>
+    <div class="eyebrow">A free-for-all memory showdown</div>
+    <h1>TOTAL <b>RECALL</b></h1>
+    <p class="lead">Five rounds. Every round makes your brain do something strange — and then shows you exactly what happened and why.</p>
+    <div class="facts"><span>2–6 players</span><span>≈ 45 minutes</span><span>AP Psychology · Unit 2: Cognition</span><span>Pencil + recall sheet each</span></div>
+    <div class="row"><button class="btn" id="go">New Game</button><a class="btn ghost" href="rules.html">How to Play</a><a class="btn ghost" href="psych.html">The Psychology</a></div>
+  </div>`;
+  document.getElementById('go').onclick=setupScreen;
+}
+
+/* ---------- SETUP ---------- */
+function setupScreen(){
+  cancel();S.mode='setup';renderTop();
+  const seg=(id,opts,val)=>`<div class="seg" id="${id}">${opts.map(([v,l])=>`<button data-v="${v}" class="${String(v)===String(val)?'on':''}">${l}</button>`).join('')}</div>`;
+  stage.innerHTML=`<div class="wrap"><div class="center"><div class="eyebrow">Game setup</div><h2 style="font-size:44px;margin-top:6px">Who's playing?</h2></div>
+   <div class="grid2" style="margin-top:24px">
+    <div class="panel">
+      <div class="field"><label>Players</label>${seg('pn',[2,3,4,5,6].map(v=>[v,v]),S.n)}</div>
+      <div id="plist"></div>
+    </div>
+    <div class="panel">
+      <div class="field"><label>Deck</label>${seg('deck',[['A','Deck A'],['B','Deck B']],S.deck)}<span class="hint">Played Deck A before? Use Deck B so the lists are new.</span></div>
+      <div class="field"><label>Word speed</label>${seg('fl',[[1500,'Fast · 1.5s'],[2000,'Normal · 2s'],[2500,'Slow · 2.5s']],S.settings.flash)}</div>
+      <div class="field"><label>Recall timer</label>${seg('rc',[[45,'45s'],[60,'60s'],[90,'90s']],S.settings.recall)}</div>
+      <div class="field"><label>Each player needs</label><span>A pencil and a printed <a href="rules.html#sheet">recall sheet</a> (or a blank paper with boxes for Rounds 1–4).</span></div>
+    </div>
+   </div>
+   <div class="row"><button class="btn ghost" id="back">Back</button><button class="btn" id="start">Start Round 1 →</button></div></div>`;
+  const plist=()=>{document.getElementById('plist').innerHTML=Array.from({length:S.n},(_,i)=>`<div class="prow"><span class="dot" style="background:${COLORS[i]}"></span><input data-i="${i}" maxlength="14" placeholder="Player ${i+1}" value="${esc(S.names[i])}"><span class="kbd" title="Buzzer key">${KEYS[i]}</span></div>`).join('')+`<p class="hint">The letter is each player's buzzer key for Round 5 (number keys 1–${S.n} also work).</p>`;
+    document.querySelectorAll('#plist input').forEach(inp=>inp.oninput=()=>S.names[+inp.dataset.i]=inp.value)};
+  plist();
+  const bindSeg=(id,fn)=>document.querySelectorAll(`#${id} button`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.remove('on'));b.classList.add('on');fn(b.dataset.v)});
+  bindSeg('pn',v=>{S.n=+v;plist()});
+  bindSeg('deck',v=>S.deck=v);
+  bindSeg('fl',v=>S.settings.flash=+v);
+  bindSeg('rc',v=>S.settings.recall=+v);
+  document.getElementById('back').onclick=titleScreen;
+  document.getElementById('start').onclick=()=>{
+    S.players=Array.from({length:S.n},(_,i)=>({name:(S.names[i]||'').trim()||`Player ${i+1}`,color:COLORS[i],key:KEYS[i],rounds:[0,0,0,0,0]}));
+    S.round=0;S.tally={};B.reset();roundIntro(0);
+  };
+}
+
+/* ---------- ROUND INTRO ---------- */
+function roundIntro(r){
+  cancel();S.round=r;S.mode=r===4?'bowlintro':'intro';renderTop();
+  const R=ROUNDS[r];
+  const keys=r===4?`<div class="keys">${S.players.map(p=>`<div><span class="dot" style="width:14px;height:14px;border-radius:50%;background:${p.color}"></span>${esc(p.name)} <span class="kbd">${p.key}</span></div>`).join('')}</div>`:'';
+  stage.innerHTML=`<div class="wrap center" style="max-width:820px">
+   <div class="eyebrow">Round ${r+1} of 5</div><h2 style="font-size:clamp(44px,7vw,80px);margin-top:6px">${R.title}</h2>
+   <ol class="steps">${R.steps.map((s,i)=>`<li><span class="n">${i+1}</span><span>${s}</span></li>`).join('')}</ol>${keys}
+   <div class="row"><button class="btn" id="begin">${r===4?'Start the Bowl':'Begin'} →</button></div></div>`;
+  document.getElementById('begin').onclick=()=>flow([runR1,runR2,runR3,runR4,runBowl][r]);
+}
+
+/* ---------- SHARED PIECES ---------- */
+function card(inner,meta,extra=''){stage.innerHTML=`<div class="wrap center"><div class="card flash">${meta?`<div class="cardmeta">${meta}</div>`:''}${inner}</div>${extra}</div>`}
+function dots(i,n){return `<div class="progress">${Array.from({length:n},(_,k)=>`<i class="${k<=i?'on':''}"></i>`).join('')}</div>`}
+async function ready(msg){
+  for(const n of [3,2,1]){card(`<div class="flashword">${n}</div>`,esc(msg));beep(440,.08);await wait(800)}
+  card('<div class="flashword"></div>');await wait(250);
+}
+async function flashList(words,ms){
+  for(let i=0;i<words.length;i++){card(`<div class="flashword">${esc(words[i])}</div>`,'',dots(i,words.length));await wait(ms);card('<div class="flashword"></div>','',dots(i,words.length));await wait(300)}
+}
+function countdown(sec,title,sub){
+  const g=gen;return new Promise((res,rej)=>{
+    let left=sec*1000,last=performance.now(),paused=false,lastBeep=99;const C=2*Math.PI*52;
+    stage.innerHTML=`<div class="wrap center"><div class="eyebrow">Pencils up!</div><h2 style="font-size:clamp(32px,5vw,56px);margin-top:6px">${title}</h2>${sub?`<p class="lead">${sub}</p>`:''}
+     <div class="timer" id="tw"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52"/><circle class="prog" id="tp" cx="60" cy="60" r="52" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg><div class="tnum" id="tn">${sec}</div></div>
+     <div class="row"><button class="btn ghost" id="tpause">Pause</button><button class="btn ghost" id="tskip">Everyone's done →</button></div></div>`;
+    const tp=document.getElementById('tp'),tn=document.getElementById('tn'),tw=document.getElementById('tw');
+    document.getElementById('tpause').onclick=e=>{paused=!paused;e.target.textContent=paused?'Resume':'Pause'};
+    document.getElementById('tskip').onclick=()=>left=0;
+    (function tick(now){
+      if(g!==gen)return rej(CANCEL);
+      if(!paused)left-=(now-last)/SPEED;last=now;
+      if(left<=0){beep(880,.35,'triangle',.2);return res()}
+      const s=Math.ceil(left/1000);tn.textContent=s;tp.style.strokeDashoffset=C*(1-left/(sec*1000));
+      tw.classList.toggle('low',s<=5);
+      if(s<=3&&s!==lastBeep){lastBeep=s;beep(520,.08)}
+      requestAnimationFrame(tick);
+    })(performance.now());
+  });
+}
+function tallyScreen({title,sub,key,items,legend='',next}){
+  cancel();S.mode='tally';renderTop();
+  const n=S.players.length;S.tally[key]=S.tally[key]||items.map(()=>0);const T=S.tally[key];
+  stage.innerHTML=`<div class="wrap center"><div class="eyebrow">Answer key</div><h2 style="font-size:clamp(32px,5vw,52px);margin-top:6px">${title}</h2><p class="lead">${sub}</p>
+   <div class="tally">${items.map((it,i)=>`<div class="tchip ${it.cls||''}" data-i="${i}"><div class="w">${esc(it.label)}</div><div class="s">${it.sub||''}</div><span class="cnt">${T[i]}</span><button class="minus" data-i="${i}" title="Undo">−</button></div>`).join('')}</div>
+   ${legend}<p class="hint">Tap a card once for every player who got it (max ${n}). Use − to undo. Skip the tally if you're short on time.</p>
+   <div class="row"><button class="btn" id="tnext">See what happened →</button></div></div>`;
+  const upd=i=>stage.querySelector(`.tchip[data-i="${i}"] .cnt`).textContent=T[i];
+  stage.querySelectorAll('.tchip').forEach(c=>c.onclick=()=>{const i=+c.dataset.i;if(T[i]<n){T[i]++;beep(700,.05)}upd(i)});
+  stage.querySelectorAll('.minus').forEach(b=>b.onclick=e=>{e.stopPropagation();const i=+b.dataset.i;if(T[i]>0)T[i]--;upd(i)});
+  document.getElementById('tnext').onclick=next;
+}
+function gotcha({stamp='GOTCHA!',concept,happened,why,terms,chart,next}){
+  cancel();S.mode='gotcha';renderTop();
+  stage.innerHTML=`<div class="wrap center"><div class="stamp ${stamp.length>10?'long':''}">${stamp}</div><h2 style="font-size:clamp(34px,5.4vw,60px)">${concept}</h2>
+   <div class="gotcha"><div><h3>What just happened</h3><p>${happened}</p><h3>Why</h3><p>${why}</p><div class="chart">${chart}</div></div>
+   <div><h3>Key terms</h3><div class="terms">${terms.map(([t,d])=>`<div class="term"><b>${t}</b> — <span>${d}</span></div>`).join('')}</div></div></div>
+   <div class="row"><button class="btn" id="gnext">${S.round===4?'Final results →':'Enter scores →'}</button></div></div>`;
+  document.getElementById('gnext').onclick=next;
+}
+/* simple SVG bar chart */
+function bars(data,{max,yLabel='',fmt=v=>v}={}){
+  const W=640,H=270,pl=40,pb=58,pt=16,pr=10,cw=(W-pl-pr)/data.length;
+  max=max||Math.max(1,...data.map(d=>d.v));
+  const y=v=>pt+(H-pt-pb)*(1-v/max);
+  const empty=data.every(d=>!d.v);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(yLabel)}">`;
+  for(let k=0;k<=4;k++){const v=max*k/4,yy=y(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="#2d3b78" stroke-width="1"/><text x="${pl-8}" y="${yy+4}" fill="#a3add9" font-size="12" text-anchor="end">${fmt(Math.round(v*10)/10)}</text>`}
+  data.forEach((d,i)=>{const x=pl+i*cw+cw*.14,w=cw*.72,yy=y(d.v);
+    s+=`<rect x="${x}" y="${yy}" width="${w}" height="${Math.max(0,H-pb-yy)}" rx="4" fill="${d.c}"/>`;
+    if(d.v)s+=`<text x="${x+w/2}" y="${yy-5}" fill="#eef1ff" font-size="12" font-weight="700" text-anchor="middle">${fmt(d.v)}</text>`;
+    s+=`<text x="${x+w/2}" y="${H-pb+16}" fill="#a3add9" font-size="${data.length>10?11:13}" text-anchor="middle">${esc(d.l)}</text>`;
+    if(d.l2)s+=`<text x="${x+w/2}" y="${H-pb+32}" fill="#7d88b8" font-size="11" text-anchor="middle">${esc(d.l2)}</text>`;
+  });
+  if(yLabel)s+=`<text x="${pl}" y="${H-6}" fill="#a3add9" font-size="12">${esc(yLabel)}</text>`;
+  if(empty)s+=`<text x="${W/2}" y="${H/2-10}" fill="#a3add9" font-size="16" text-anchor="middle">No tally entered — go back next time to see your class's data!</text>`;
+  return s+'</svg>';
+}
+
+/* ---------- SCORE ENTRY + STANDINGS ---------- */
+function scoreEntry(r,howto){
+  cancel();S.mode='scores';renderTop();
+  const max=ROUNDS[r].max;
+  stage.innerHTML=`<div class="wrap center" style="max-width:820px"><div class="eyebrow">Round ${r+1} scoring</div><h2 style="font-size:clamp(34px,5vw,54px);margin-top:6px">Enter points</h2>
+   <p class="lead">${howto}</p><div style="margin-top:22px">${S.players.map((p,i)=>`<div class="srow"><span class="dot" style="background:${p.color}"></span><b>${esc(p.name)}</b>
+     <div class="step"><button data-i="${i}" data-d="-1">−</button><input type="number" min="0" max="${max}" data-i="${i}" value="${p.rounds[r]}"><button data-i="${i}" data-d="1">+</button></div><span class="tot">of ${max}</span></div>`).join('')}</div>
+   <div class="row"><button class="btn" id="snext">Save &amp; see standings →</button></div></div>`;
+  const clamp=v=>Math.max(0,Math.min(max,v|0));
+  stage.querySelectorAll('.step button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,inp=stage.querySelector(`input[data-i="${i}"]`);inp.value=clamp(+inp.value+ +b.dataset.d);S.players[i].rounds[r]=+inp.value;renderTop()});
+  stage.querySelectorAll('.step input').forEach(inp=>inp.oninput=()=>{S.players[+inp.dataset.i].rounds[r]=clamp(+inp.value);renderTop()});
+  document.getElementById('snext').onclick=()=>{stage.querySelectorAll('.step input').forEach(inp=>{inp.value=clamp(+inp.value);S.players[+inp.dataset.i].rounds[r]=+inp.value});standings(r)};
+}
+function standings(r){
+  cancel();S.mode='standings';renderTop();
+  const ps=[...S.players].sort((a,b)=>total(b)-total(a)),top1=Math.max(1,...ps.map(total));
+  stage.innerHTML=`<div class="wrap center" style="max-width:820px"><div class="eyebrow">After Round ${r+1}</div><h2 style="font-size:clamp(34px,5vw,54px);margin-top:6px">Standings</h2>
+   <div style="margin-top:24px;display:grid;gap:10px">${ps.map(p=>`<div style="display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center;text-align:left"><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</b><div class="bar" style="width:${Math.max(6,total(p)/top1*100)}%;background:${p.color}">${total(p)}</div></div>`).join('')}</div>
+   <div class="row"><button class="btn" id="nr">Round ${r+2}: ${ROUNDS[r+1].title} →</button></div></div>`;
+  document.getElementById('nr').onclick=()=>roundIntro(r+1);
+}
+
+/* ---------- ROUND 1: Serial position ---------- */
+async function runR1(){
+  S.mode='play';renderTop();
+  await ready('Watch the words — no writing yet!');
+  await flashList(D().r1,S.settings.flash);
+  await countdown(S.settings.recall,'Write every word you remember','Any order. Round 1 box.');
+  tallyScreen({title:'The List',sub:'Read each word aloud, in order. Players raise a hand if they wrote it.',key:'r1',
+    items:D().r1.map((w,i)=>({label:w,sub:`Word #${i+1}`})),next:r1Gotcha});
+}
+function r1Gotcha(){
+  const T=S.tally.r1,n=T.length;
+  gotcha({concept:'The Serial Position Effect',
+    happened:'Look at the chart: most players remembered the <b>first few</b> and the <b>last few</b> words, but the middle of the list sagged into a "U" shape.',
+    why:'The first words got the most <b>rehearsal</b> (you repeated them while the list was still short), so they reached <b>long-term memory</b> — the <b>primacy effect</b>. The last words were still sitting in <b>short-term memory</b> when the timer started — the <b>recency effect</b>. Middle words got neither advantage.',
+    terms:[['Serial position effect','tendency to recall the first and last items in a list best'],['Primacy effect','better recall of early items, thanks to rehearsal into long-term memory'],['Recency effect','better recall of the most recent items, still held in short-term memory'],['Short-term memory','brief, limited store; fades in about 20 seconds without rehearsal'],['Maintenance rehearsal','repeating information to keep it active in memory'],['Free recall','retrieving items in any order with no cues']],
+    chart:bars(T.map((v,i)=>({v,l:String(i+1),c:i<3?'#FFB547':i>=n-3?'#4CC9F0':'#4a5794'})),{max:S.players.length,yLabel:'Players who recalled it · by position in list'}),
+    next:()=>scoreEntry(0,'Swap sheets with the player on your left. Count their correct Round 1 words — <b>1 point each</b>.')});
+}
+
+/* ---------- ROUND 2: Working memory + chunking ---------- */
+async function runR2(){
+  S.mode='play';renderTop();
+  const L=D().r2;
+  for(let i=0;i<L.length;i++){
+    await ready(`String ${i+1} of ${L.length} · ${L[i].kind}`);
+    card(`<div class="flashword seq">${esc(L[i].show)}</div>`,`String ${i+1}`);
+    await wait(L[i].ms);
+    card('<div class="flashword small">Write it!</div>',`String ${i+1}`);beep(880,.15);await wait(600);
+    await countdown(12,`Write string #${i+1}`,`Line ${i+1} of your Round 2 box — exact order.`);
+  }
+  tallyScreen({title:'Strings',sub:'Read each answer aloud. Raise a hand if you got it <b>exactly</b> right.',key:'r2',
+    items:L.map((it,i)=>({label:it.show.replace(/ /g,''),sub:`#${i+1} · ${it.kind}`})),next:r2Gotcha});
+}
+function r2Gotcha(){
+  const T=S.tally.r2,L=D().r2;
+  gotcha({concept:'Working Memory Limits &amp; Chunking',
+    happened:`The short strings were easy, but accuracy crashed somewhere around <b>7–9 items</b>. Then the last 12-letter string felt way easier than the first — it was secretly <b>${L[5].chunks}</b>.`,
+    why:'Short-term (working) memory holds only about <b>7 ± 2 items</b> (George Miller). <b>Chunking</b> groups items into meaningful units, so 12 random-looking letters became just <b>4 chunks</b> you already knew from long-term memory — well inside your capacity.',
+    terms:[['Working memory','active "workspace" where information is held and manipulated in the moment'],['Memory span (7 ± 2)','Miller\'s estimate of how many items short-term memory can hold'],['Chunking','organizing items into familiar, meaningful units to fit more into short-term memory'],['Effortful processing','encoding that takes attention and conscious effort, like holding a number string'],['Decay','information fading from short-term memory when it isn\'t rehearsed']],
+    chart:bars(T.map((v,i)=>({v,l:L[i].kind,l2:i===4?'random':i===5?'chunkable':'',c:i===5?'#3DDC97':i===4?'#FF6B6B':'#4CC9F0'})),{max:S.players.length,yLabel:'Players who got it exactly right'}),
+    next:()=>scoreEntry(1,'Swap sheets. <b>1 point</b> for each string written perfectly (every character, right order).')});
+}
+
+/* ---------- ROUND 3: Levels of processing (incidental) ---------- */
+async function runR3(){
+  S.mode='play';renderTop();
+  const L=D().r3;
+  await ready('Shout YES or NO — fast!');
+  for(let i=0;i<L.length;i++){
+    card(`<div class="flashword small">${esc(L[i][0])}</div>`,esc(L[i][1]),dots(i,L.length));
+    await wait(4000);
+    card('<div class="flashword"></div>','',dots(i,L.length));await wait(300);
+  }
+  card(`<div class="flashword small" style="color:#e5484d">SURPRISE!</div><p style="font-size:clamp(20px,2.6vw,30px);font-weight:700;margin:22px 0 0;max-width:760px">Pick up your pencil. Write down as many of the <u>words</u> from that round as you can remember.</p>`,'Round 3 box',
+    `<div class="row"><button class="btn" id="go3">Start recall timer →</button></div>`);
+  beep(330,.3,'square',.12);
+  await waitClick('go3');
+  await countdown(S.settings.recall,'Write the words you remember','Any order. Round 3 box.');
+  tallyScreen({title:'Snap Judgments',sub:'Read each word aloud. Raise a hand if you wrote it.',key:'r3',
+    items:L.map(([w,q,t])=>({label:w,sub:q,cls:t==='d'?'deep':'shallow'})),
+    legend:`<div class="legend"><span><i style="background:var(--violet)"></i>Question about meaning</span><span><i style="background:#c9c1a8"></i>Question about letters</span></div>`,next:r3Gotcha});
+}
+function r3Gotcha(){
+  const T=S.tally.r3,L=D().r3,n=S.players.length||1;
+  const avg=t=>{const ix=L.map((x,i)=>x[2]===t?i:-1).filter(i=>i>=0);return ix.reduce((a,i)=>a+T[i],0)/ix.length/n*100};
+  const sh=Math.round(avg('s')),dp=Math.round(avg('d'));
+  const self=L.find(x=>x[1].startsWith('Have YOU'))[0];
+  gotcha({concept:'Levels of Processing',
+    happened:`You were never told to memorize anything — but you still remembered words. And you remembered more of the words where you thought about <b>meaning</b> (Is it alive? Could you eat it?) than the ones where you only looked at <b>letters</b> (Is it in capitals? Does it have an E?).`,
+    why:`Craik &amp; Lockhart's <b>levels of processing</b>: <b>deep (semantic) processing</b> builds stronger, more connected memory traces than <b>shallow (structural) processing</b>. "${esc(self)}" asked about <i>you</i> — the <b>self-reference effect</b> makes encoding even deeper. Since you weren't trying to learn, this was <b>automatic processing</b> (incidental learning).`,
+    terms:[['Encoding','getting information into the memory system'],['Shallow processing','encoding based on surface features like letters or appearance; weak memories'],['Deep processing','encoding based on meaning (semantic); strong, lasting memories'],['Self-reference effect','better memory for information related to ourselves'],['Automatic processing','unconscious encoding that happens without effort'],['Effortful processing','encoding that requires attention and work']],
+    chart:bars([{v:sh,l:'Letters (shallow)',c:'#8f88a8'},{v:dp,l:'Meaning (deep)',c:'#A78BFA'}],{max:100,yLabel:'Average % of players who recalled the word',fmt:v=>v+'%'}),
+    next:()=>scoreEntry(2,'Swap sheets. <b>1 point</b> for each correct word recalled from Round 3.')});
+}
+
+/* ---------- ROUND 4: False memory (DRM) ---------- */
+async function runR4(){
+  S.mode='play';renderTop();
+  const R=D().r4;
+  await ready('Memorize this list!');
+  await flashList(R.list,S.settings.flash);
+  card(`<div class="flashword small">Memory test</div><p style="font-size:clamp(20px,2.6vw,30px);font-weight:700;margin:22px 0 0;max-width:780px">Number lines 1–8 in your Round 4 box. For each word, write <b>Y</b> if it was on the list or <b>N</b> if it wasn't.</p>`,'Round 4 box',
+    `<div class="row"><button class="btn" id="go4">Start the test →</button></div>`);
+  await waitClick('go4');
+  for(let i=0;i<R.test.length;i++){
+    card(`<div class="flashword">${esc(R.test[i][0])}</div>`,`Test word #${i+1} — Y or N?`,dots(i,R.test.length));
+    beep(600,.06);await wait(5000);
+  }
+  const lab={old:'✓ Was on the list',new:'✗ Never shown',lure:'✗ Never shown'};
+  tallyScreen({title:'Memory Check',sub:'Read each word and the answer. Raise a hand if you wrote <b>Y</b> (yes, it was on the list).',key:'r4',
+    items:R.test.map(([w,t],i)=>({label:`${i+1}. ${w}`,sub:lab[t],cls:t})),
+    legend:`<div class="legend"><span><i style="background:var(--good)"></i>Really on the list</span><span><i style="background:#c9c1a8"></i>Not on the list</span><span><i style="background:var(--bad)"></i>Not on the list… hmm</span></div>`,next:r4Gotcha});
+}
+function r4Gotcha(){
+  const T=S.tally.r4,R=D().r4,L=R.lure.toUpperCase();
+  gotcha({stamp:'IT WAS NEVER THERE',concept:'False Memory',
+    happened:`<b>${L}</b> was never on the list — but lots of players said YES, often feeling just as sure as they did about the real words. Every word on the list was <i>related</i> to ${L}.`,
+    why:`Memory is <b>reconstructive</b>, not a video recording. Each word you saw activated related ideas in your <b>semantic network</b> (<b>spreading activation</b>), and all 15 words pointed at "${R.lure}" — <b>priming</b> it over and over. At test time you couldn't separate what you <i>saw</i> from what you <i>thought of</i> (<b>source amnesia</b>), so your brain filled the gap with a <b>false memory</b>. This is the famous Deese–Roediger–McDermott (DRM) experiment.`,
+    terms:[['Reconstructive memory','recalling by rebuilding events from stored pieces plus expectations, which can introduce errors'],['False memory','remembering something that never happened'],['Semantic network','concepts stored as connected nodes; related ideas are linked'],['Spreading activation','activating one concept also activates related ones'],['Priming','earlier exposure to a stimulus unconsciously influences later responses'],['Source amnesia','remembering information but forgetting where it came from']],
+    chart:bars(R.test.map(([w,t],i)=>({v:T[i],l:w,c:t==='old'?'#3DDC97':t==='lure'?'#FF6B6B':'#4a5794'})),{max:S.players.length,yLabel:'Players who said YES, it was on the list'}),
+    next:()=>scoreEntry(3,`Swap sheets. <b>1 point</b> per correct answer. Correct answers: ${R.test.map(([w,t])=>`${w} = ${t==='old'?'Y':'N'}`).join(', ')}.`)});
+}
+
+/* ---------- ROUND 5: Recall Bowl ---------- */
+const B={i:0,locked:new Set(),buzzer:null,state:'open',log:[],timerStart:0,
+  reset(){this.i=0;this.locked=new Set();this.buzzer=null;this.state='open';this.log=[]}};
+async function runBowl(){B.reset();S.mode='bowl';bowlQ()}
+function bowlQ(){
+  cancel();S.mode='bowl';renderTop();
+  const q=D().bowl[B.i],pts=BOWL_PTS[q.type],N=D().bowl.length;
+  B.log[B.i]=B.log[B.i]||{type:q.type,correct:0,wrong:0,none:0};
+  let body=`<div class="qtext">${esc(q.q)}</div>`;
+  if(q.cue)body+=`<div class="cue">${esc(q.cue)}</div>`;
+  if(q.opts)body+=`<div class="opts">${q.opts.map((o,k)=>`<div><b>${'ABCD'[k]}</b>${esc(o)}</div>`).join('')}</div>`;
+  if(B.state==='done')body+=`<div class="answer">Answer: ${esc(q.a)}</div>`;
+  const bp=B.buzzer!=null?S.players[B.buzzer]:null;
+  let line='';
+  if(B.state==='open')line=`<span style="color:var(--muted)">Buzzers open — ${S.players.map(p=>`<span class="kbd">${p.key}</span>`).join(' ')}</span>`;
+  if(B.state==='buzzed')line=`<span class="who" style="background:${bp.color}">${esc(bp.name)}</span><span>answer now!</span><span id="atime" style="color:var(--muted);font-variant-numeric:tabular-nums">5</span>`;
+  let ctl='';
+  if(B.state==='buzzed')ctl=`<button class="btn good" id="bok">✓ Correct (+${pts})</button><button class="btn bad" id="bno">✗ Wrong (−1)</button>`;
+  if(B.state==='open')ctl=`<button class="btn ghost" id="brev">No one knows — reveal</button>`;
+  if(B.state==='done')ctl=`<button class="btn" id="bnext">${B.i+1<N?'Next question →':'See what happened →'}</button>`;
+  stage.innerHTML=`<div class="wrap center"><div class="eyebrow">Toss-up ${B.i+1} of ${N}</div>
+   <div class="card qcard" style="margin-top:12px"><span class="typebadge">${BOWL_LABEL[q.type]}</span><span class="ptsbadge">${pts} pt${pts>1?'s':''}</span>${body}</div>
+   <div class="buzzline">${line}</div><div class="row" style="margin-top:8px">${ctl}</div></div>`;
+  const on=(id,fn)=>{const el=document.getElementById(id);if(el)el.onclick=fn};
+  on('bok',()=>{S.players[B.buzzer].rounds[4]+=pts;B.log[B.i].correct++;B.state='done';beep(990,.25,'triangle',.2);bowlQ()});
+  on('bno',()=>{S.players[B.buzzer].rounds[4]-=1;B.log[B.i].wrong++;B.locked.add(B.buzzer);B.buzzer=null;beep(160,.35,'sawtooth',.12);
+    B.state=B.locked.size>=S.players.length?'done':'open';bowlQ()});
+  on('brev',()=>{B.log[B.i].none++;B.state='done';bowlQ()});
+  on('bnext',()=>{B.i++;B.locked=new Set();B.buzzer=null;B.state='open';if(B.i>=N)bowlGotcha();else bowlQ()});
+  if(B.state==='buzzed'){const g=gen,t0=performance.now();(function t(){if(g!==gen)return;const el=document.getElementById('atime');if(!el)return;const left=Math.max(0,5-(performance.now()-t0)/1000/SPEED);el.textContent=left>0?Math.ceil(left)+'s':'Time!';if(left>0)requestAnimationFrame(t)})()}
+}
+function buzz(i){
+  if(S.mode!=='bowl'||B.state!=='open'||i==null||i>=S.players.length||B.locked.has(i))return;
+  B.buzzer=i;B.state='buzzed';beep(300+i*90,.3,'square',.15);bowlQ();
+}
+document.addEventListener('keydown',e=>{
+  if(S.mode!=='bowl'||e.repeat||e.target.tagName==='INPUT')return;
+  const k=e.key.toUpperCase();let i=KEYS.indexOf(k);
+  if(i<0&&/^[1-6]$/.test(k))i=+k-1;
+  if(i>=0){e.preventDefault();buzz(i)}
+});
+function bowlGotcha(){
+  const rate=t=>{const L=B.log.filter(x=>x&&x.type===t);const c=L.reduce((a,x)=>a+x.correct,0),tries=L.reduce((a,x)=>a+x.correct+x.wrong+x.none,0);return tries?Math.round(c/tries*100):0};
+  gotcha({concept:'Recall vs. Recognition',
+    happened:'Multiple-choice and true/false questions were the easiest, letter-cue questions came next, and open "name the word" questions were the hardest. You probably also mixed up which round a word came from.',
+    why:'<b>Recognition</b> only asks you to match what you see with a stored memory; <b>recall</b> makes you generate it from scratch. A <b>retrieval cue</b> like a first letter narrows the search, which is why cued recall sits in between (and why a cue can rescue a word on the <b>tip of your tongue</b>). With five lists in your head, old lists blocked new ones (<b>proactive interference</b>) and new lists blocked old ones (<b>retroactive interference</b>). The good news: being tested just now made these memories stronger — the <b>testing effect</b>.',
+    terms:[['Recall','retrieving information with no options to choose from'],['Recognition','identifying previously learned information from options'],['Retrieval cue','a hint that helps access a stored memory'],['Tip-of-the-tongue','feeling you know a word but cannot quite retrieve it'],['Proactive interference','old learning disrupts recall of new information'],['Retroactive interference','new learning disrupts recall of old information'],['Testing effect','retrieval practice strengthens memory more than rereading']],
+    chart:bars(['recog','cued','recall'].map(t=>({v:rate(t),l:BOWL_LABEL[t],l2:`${BOWL_PTS[t]} pt${BOWL_PTS[t]>1?'s':''}`,c:t==='recog'?'#3DDC97':t==='cued'?'#FFB547':'#FF6B6B'})),{max:100,yLabel:'Success rate (correct ÷ all attempts and misses)',fmt:v=>v+'%'}),
+    next:finalScreen});
+}
+
+/* ---------- FINAL ---------- */
+function finalScreen(){
+  cancel();S.mode='final';renderTop();
+  const ps=[...S.players].sort((a,b)=>total(b)-total(a));
+  const order=[ps[1],ps[0],ps[2]].filter(Boolean),hts={0:170,1:120,2:85};
+  const recap=[['Round 1','Serial position effect — primacy &amp; recency'],['Round 2','Working memory capacity (7 ± 2) &amp; chunking'],['Round 3','Levels of processing &amp; the self-reference effect'],['Round 4','False memory, spreading activation &amp; source amnesia'],['Round 5','Recall vs. recognition, retrieval cues &amp; interference']];
+  stage.innerHTML=`<div class="wrap center"><div class="eyebrow">Game over</div><h2 style="font-size:clamp(44px,7vw,84px);margin-top:6px">${esc(ps[0].name)} wins!</h2>
+   <div class="podium">${order.map(p=>{const place=ps.indexOf(p);return `<div class="podcol"><div class="pn">${esc(p.name)}</div><div class="ps">${total(p)}</div><div class="pod" style="height:${hts[place]}px;background:${p.color}"><div class="place">${place+1}</div></div></div>`}).join('')}</div>
+   <div class="grid2" style="margin-top:28px;text-align:left">
+    <div class="panel"><h3 style="font-size:22px">Score breakdown</h3><table class="break"><tr><th>Player</th>${ROUNDS.map((_,i)=>`<th>R${i+1}</th>`).join('')}<th>Total</th></tr>
+      ${ps.map(p=>`<tr><td><b style="color:${p.color}">${esc(p.name)}</b></td>${p.rounds.map(v=>`<td>${v}</td>`).join('')}<td><b>${total(p)}</b></td></tr>`).join('')}</table></div>
+    <div class="panel"><h3 style="font-size:22px">What your brain did today</h3><div class="recap">${recap.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div></div>
+   </div>
+   <div class="row"><button class="btn" id="again">Play again with Deck ${S.deck==='A'?'B':'A'}</button><a class="btn ghost" href="psych.html">The Psychology</a><button class="btn ghost" id="home">Main menu</button></div></div>`;
+  beep(523,.15);setTimeout(()=>beep(659,.15),150);setTimeout(()=>beep(784,.3),300);
+  document.getElementById('again').onclick=()=>{S.deck=S.deck==='A'?'B':'A';S.players.forEach(p=>p.rounds=[0,0,0,0,0]);S.tally={};B.reset();roundIntro(0)};
+  document.getElementById('home').onclick=titleScreen;
+}
+
+titleScreen();
+</script>
+</body>
+</html>

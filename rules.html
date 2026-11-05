@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Total Recall Rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+:root{--ink:#1b2142;--muted:#5b628c;--paper:#fbf6e9;--accent:#c98a12;--line:#d9d2bd;--red:#e5484d;--blue:#6e96e1}
+*{box-sizing:border-box}
+body{margin:0;background:#ece6d6;color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;font-size:16px;line-height:1.5}
+.page{max-width:850px;margin:24px auto;background:var(--paper);padding:48px 56px;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+@media(max-width:640px){.page{padding:28px 18px;margin:0;border-radius:0}}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1;margin:0}
+h1{font-size:52px;letter-spacing:.03em}
+h1 b{color:var(--accent)}
+h2{font-size:26px;margin:30px 0 10px;padding-bottom:6px;border-bottom:3px solid var(--red)}
+h3{font-size:19px;margin:18px 0 4px}
+.sub{color:var(--muted);font-size:18px;margin:6px 0 0}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.facts span{border:1.5px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
+ul,ol{padding-left:22px;margin:6px 0}
+li{margin:3px 0}
+.round{border:2px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0;break-inside:avoid;background:#fff}
+.round .tag{float:right;font-size:13px;font-weight:700;background:#1b2142;color:#fff;border-radius:999px;padding:3px 10px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:15px}
+th,td{border:1.5px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f2ecdc}
+.kbd{display:inline-block;min-width:26px;text-align:center;padding:1px 7px;border-radius:6px;border:1.5px solid #9aa0be;border-bottom-width:3px;font-weight:700;background:#fff}
+.example{background:#fff;border-left:5px solid var(--blue);padding:12px 16px;border-radius:0 10px 10px 0;margin:10px 0;break-inside:avoid}
+.example p{margin:4px 0}
+.mock{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
+.mini{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;width:200px;height:120px;position:relative;display:grid;place-items:center;font-family:Fraunces,serif;font-weight:800;font-size:28px;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 22px,rgba(110,150,225,.3) 22px 23px);background-position:0 32px}
+.mini::before{content:'';position:absolute;top:28px;left:0;right:0;height:2px;background:rgba(229,72,77,.55)}
+.mini small{position:absolute;top:5px;left:0;right:0;text-align:center;font-family:'Space Grotesk';font-size:11px;font-weight:700;color:var(--muted)}
+.note{font-size:14px;color:var(--muted)}
+.toolbar{max-width:850px;margin:16px auto 0;display:flex;gap:10px;justify-content:flex-end;padding:0 8px}
+.toolbar a,.toolbar button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 16px;background:#1b2142;color:#fff;cursor:pointer;text-decoration:none}
+/* Recall sheet */
+.sheet{page-break-before:always;break-before:page}
+.sheet .hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:3px solid var(--red);padding-bottom:6px}
+.sheet .name{flex:1;border-bottom:1.5px solid var(--ink);height:28px;max-width:300px}
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{border:2px solid var(--ink);border-radius:10px;padding:8px 12px}
+.box h3{margin:0 0 4px;font-size:16px;display:flex;justify-content:space-between}
+.box h3 span{font-family:'Space Grotesk';font-size:13px;color:var(--muted)}
+.lines div{border-bottom:1px solid #b9c6e6;height:26px;font-size:12px;color:#9aa0be;padding-top:8px}
+.cols{display:grid;grid-template-columns:1fr 1fr;column-gap:14px}
+.wide{grid-column:1/-1}
+@media print{
+  body{background:#fff}
+  .page{box-shadow:none;margin:0;max-width:none;padding:0.4in 0.5in;border-radius:0}
+  .toolbar{display:none}
+  .round,.example{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="toolbar"><a href="index.html">← Play the game</a><a href="psych.html">The Psychology</a><button onclick="print()">Print rules + sheet</button></div>
+
+<div class="page">
+  <h1>TOTAL <b>RECALL</b></h1>
+  <p class="sub">A free-for-all memory showdown. Five rounds, each one makes your brain do something strange, then shows you what happened and why.</p>
+  <div class="facts"><span>2–6 players + 1 host</span><span>≈ 45 minutes</span><span>Ages 13+</span><span>AP Psychology · Unit 2: Cognition</span></div>
+
+  <h2>Goal</h2>
+  <p>Score the most points across five memory rounds. Everyone plays for themselves. There are no teams.</p>
+
+  <h2>What's in the box</h2>
+  <ul>
+    <li><b>The game screen</b> (this website), shown on a laptop or projector. It flashes the cards, runs the timers and buzzers, and keeps score.</li>
+    <li><b>Recall sheets</b>, one per player (printed on the last page).</li>
+    <li><b>Pencils</b>, one per player.</li>
+    <li><b>A host</b>, one person who runs the laptop. The host can also play, but should not look at the answer key early.</li>
+  </ul>
+
+  <h2>Setup (2 minutes)</h2>
+  <ol>
+    <li>Open the game and press <b>New Game</b>.</li>
+    <li>Choose the number of players and type in names. Each player is given a color and a <b>buzzer key</b>:
+      <span class="kbd">Q</span> <span class="kbd">Z</span> <span class="kbd">T</span> <span class="kbd">B</span> <span class="kbd">P</span> <span class="kbd">M</span>
+      (or number keys 1–6, or tap your name on screen).</li>
+    <li>Pick <b>Deck A</b> or <b>Deck B</b>. If your group has played before, use the other deck so the lists are new.</li>
+    <li>Hand out a recall sheet and pencil to each player. Sit where everyone can see the screen.</li>
+  </ol>
+
+  <h2>How every round works</h2>
+  <p>Each round has the same four steps:</p>
+  <ol>
+    <li><b>Play.</b> The screen flashes words or strings. Players follow the round's instructions.</li>
+    <li><b>Answer key.</b> The host reads the answers aloud. Players raise a hand for each one they got, and the host taps that card on screen once per raised hand. This builds a chart of your group's results.</li>
+    <li><b>GOTCHA!</b> The screen reveals the psychology concept you just experienced, with your group's chart and the key terms.</li>
+    <li><b>Score.</b> Swap sheets with the player on your left and grade them. The host enters each player's points.</li>
+  </ol>
+  <p class="note">Important: don't read ahead or tell other players what a round is "really" testing. The game only works if your brain is surprised!</p>
+
+  <h2>The five rounds</h2>
+  <div class="round"><span class="tag">1 pt per word · max 15</span><h3>Round 1: The List</h3>
+    15 words flash one at a time. Watch without writing. When the timer starts, write as many words as you can remember in the Round 1 box, in any order.</div>
+  <div class="round"><span class="tag">1 pt per string · max 6</span><h3>Round 2: Strings</h3>
+    Six strings of numbers or letters flash one at a time, each longer than the one before. After each one disappears, write it on the next line of the Round 2 box. It must be exact, in the right order.</div>
+  <div class="round"><span class="tag">1 pt per word · max 12</span><h3>Round 3: Snap Judgments</h3>
+    Each card shows a word with a yes/no question ("Could you eat this?", "Is it in CAPITAL letters?"). Shout <b>YES</b> or <b>NO</b> as fast as you can. Keep your pencils down. The screen will tell you how this round is scored at the end.</div>
+  <div class="round"><span class="tag">1 pt per answer · max 8</span><h3>Round 4: Memory Check</h3>
+    15 words flash. Then 8 test words appear one at a time. For each, write <b>Y</b> (it was on the list) or <b>N</b> (it wasn't) on lines 1–8 of the Round 4 box.</div>
+  <div class="round"><span class="tag">3 / 2 / 1 pts · −1 if wrong</span><h3>Round 5: Recall Bowl (buzzer round)</h3>
+    12 toss-up questions about <b>every earlier round</b>. Anyone can buzz at any time. The first player to buzz answers out loud within 5 seconds, and the host presses Correct or Wrong.
+    <table>
+      <tr><th>Question type</th><th>Example</th><th>Points</th></tr>
+      <tr><td>Free recall</td><td>"What was the FIRST word on the Round 1 list?"</td><td>3</td></tr>
+      <tr><td>Cued recall</td><td>"A word from Round 3: B _ _ _ _ _"</td><td>2</td></tr>
+      <tr><td>Recognition</td><td>"Which was on the Round 1 list? A, B, C or D?"</td><td>1</td></tr>
+    </table>
+    A wrong answer costs <b>−1</b> and locks you out of that question, and the others can still buzz. If nobody knows, the host presses <b>Reveal</b>.</div>
+
+  <h2>Winning</h2>
+  <p>After Round 5, the player with the most total points wins. Ties are broken by Round 5 score, then by a single sudden-death question chosen by the host.</p>
+
+  <h2>Sample of play</h2>
+  <p class="note">The words below are made up for this example. They are not the real lists.</p>
+  <div class="example">
+    <p><b>Round 1.</b> Maya, Jordan and Sam watch these cards flash by:</p>
+    <div class="mock"><div class="mini"><small>1 / 15</small>lantern</div><div class="mini"><small>2 / 15</small>ocean</div><div class="mini"><small>… 15 / 15</small>trophy</div></div>
+    <p>The 60-second timer starts. Maya writes: <i>lantern, ocean, cookie, trophy, falcon, pillar</i>.</p>
+    <p>The host reads the list aloud. For "lantern," all 3 players raise a hand, so the host taps <b>lantern</b> 3 times. For "orbit" (word #8), nobody raises a hand, so it gets 0 taps.</p>
+    <p><b>GOTCHA!</b> The chart forms a "U": the first and last words were remembered best. That's the <b>serial position effect</b>.</p>
+    <p>Maya swaps sheets with Jordan. Jordan counts 6 correct words on Maya's sheet, so the host enters <b>6</b> for Maya.</p>
+  </div>
+  <div class="example">
+    <p><b>Round 5.</b> The screen shows <i>"A word from Round 1: O _ _ _ _"</i> (Cued recall, 2 pts). Sam presses <span class="kbd">T</span> and Sam's name lights up.</p>
+    <p>Sam says "orbit." That's wrong, so Sam gets −1 and is locked out. Jordan buzzes with <span class="kbd">Z</span> and says "ocean." That's correct, so Jordan gets +2.</p>
+  </div>
+
+  <h2>Host tips</h2>
+  <ul>
+    <li><b>Pause</b> stops any timer. <b>Everyone's done</b> skips the rest of it.</li>
+    <li>Tallying hands is optional but makes the GOTCHA charts much better. It takes about 1 minute per round.</li>
+    <li>The <b>Menu</b> button (top right) quits the game.</li>
+    <li>Short on time? Set the recall timer to 45s and skip the tallies. The game still fits in 30–35 minutes.</li>
+  </ul>
+</div>
+
+<div class="page sheet" id="sheet">
+  <div class="hdr"><h1 style="font-size:30px">TOTAL <b>RECALL</b> · Recall Sheet</h1><div style="display:flex;align-items:flex-end;gap:8px;flex:1;justify-content:flex-end"><b>Name:</b><div class="name"></div></div></div>
+  <div class="boxes">
+    <div class="box"><h3>Round 1 · The List <span>1 pt per word</span></h3>
+      <div class="lines cols"></div></div>
+    <div class="box"><h3>Round 2 · Strings <span>exact order</span></h3>
+      <div class="lines"></div></div>
+    <div class="box"><h3>Round 3 · Snap Judgments <span>wait for "SURPRISE!"</span></h3>
+      <div class="lines cols"></div></div>
+    <div class="box"><h3>Round 4 · Memory Check <span>Y or N</span></h3>
+      <div class="lines cols"></div></div>
+  </div>
+  <div class="box" style="margin-top:12px"><h3>Score tracker <span>graded by the player on your left</span></h3>
+    <table style="margin:4px 0 0"><tr><th>Round 1</th><th>Round 2</th><th>Round 3</th><th>Round 4</th><th>Round 5</th><th>Total</th></tr><tr><td style="height:36px"></td><td></td><td></td><td></td><td></td><td></td></tr></table>
+  </div>
+  <p class="note" style="margin-top:8px">Print one per player. Don't write anything until the screen says "Pencils up!"</p>
+</div>
+
+<script>
+// Fill in numbered lines on the recall sheet
+const counts=[16,6,12,8];
+document.querySelectorAll('.sheet .lines').forEach((el,i)=>{
+  el.innerHTML=Array.from({length:counts[i]},(_,k)=>`<div>${k+1}.</div>`).join('');
+});
+</script>
+</body>
+</html>
