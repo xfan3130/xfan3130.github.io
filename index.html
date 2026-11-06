@@ -352,7 +352,7 @@ function titleScreen(){
     <h1>TOTAL <b>RECALL</b></h1>
     <p class="lead">Five rounds. Every round makes your brain do something strange — and then shows you exactly what happened and why.</p>
     <div class="facts"><span>2–6 players</span><span>≈ 45 minutes</span><span>AP Psychology · Unit 2: Cognition</span><span>Pencil + recall sheet each</span></div>
-    <div class="row"><button class="btn" id="go">New Game</button><a class="btn ghost" href="rules.html">How to Play</a><a class="btn ghost" href="psych.html">The Psychology</a></div>
+    <div class="row"><button class="btn" id="go">New Game</button></div>
   </div>`;
   document.getElementById('go').onclick=setupScreen;
 }
@@ -371,7 +371,7 @@ function setupScreen(){
       <div class="field"><label>Deck</label>${seg('deck',[['A','Deck A'],['B','Deck B']],S.deck)}<span class="hint">Played Deck A before? Use Deck B so the lists are new.</span></div>
       <div class="field"><label>Word speed</label>${seg('fl',[[1500,'Fast · 1.5s'],[2000,'Normal · 2s'],[2500,'Slow · 2.5s']],S.settings.flash)}</div>
       <div class="field"><label>Recall timer</label>${seg('rc',[[45,'45s'],[60,'60s'],[90,'90s']],S.settings.recall)}</div>
-      <div class="field"><label>Each player needs</label><span>A pencil and a printed <a href="rules.html#sheet">recall sheet</a> (or a blank paper with boxes for Rounds 1–4).</span></div>
+      <div class="field"><label>Each player needs</label><span>A pencil and a sheet of paper with a box for each of Rounds 1–4.</span></div>
     </div>
    </div>
    <div class="row"><button class="btn ghost" id="back">Back</button><button class="btn" id="start">Start Round 1 →</button></div></div>`;
@@ -660,7 +660,7 @@ function finalScreen(){
       ${ps.map(p=>`<tr><td><b style="color:${p.color}">${esc(p.name)}</b></td>${p.rounds.map(v=>`<td>${v}</td>`).join('')}<td><b>${total(p)}</b></td></tr>`).join('')}</table></div>
     <div class="panel"><h3 style="font-size:22px">What your brain did today</h3><div class="recap">${recap.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('')}</div></div>
    </div>
-   <div class="row"><button class="btn" id="again">Play again with Deck ${S.deck==='A'?'B':'A'}</button><a class="btn ghost" href="psych.html">The Psychology</a><button class="btn ghost" id="home">Main menu</button></div></div>`;
+   <div class="row"><button class="btn" id="again">Play again with Deck ${S.deck==='A'?'B':'A'}</button><button class="btn ghost" id="home">Main menu</button></div></div>`;
   beep(523,.15);setTimeout(()=>beep(659,.15),150);setTimeout(()=>beep(784,.3),300);
   document.getElementById('again').onclick=()=>{S.deck=S.deck==='A'?'B':'A';S.players.forEach(p=>p.rounds=[0,0,0,0,0]);S.tally={};B.reset();roundIntro(0)};
   document.getElementById('home').onclick=titleScreen;
